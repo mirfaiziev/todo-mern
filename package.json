@@ -1,0 +1,35 @@
+{
+  "name": "todo-mern",
+  "version": "1.0.0",
+  "description": "Todo in Mern stack",
+  "main": "index.js",
+  "scripts": {
+    "start": "node app.js",
+    "server": "nodemon app.js",
+    "client": "npm run start --prefix client",
+    "dev": "concurrently \"npm run server\"  \"npm run client\" "
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mirfaiziev/todo-mern.git"
+  },
+  "author": "Viktor Mirfaziiev",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mirfaiziev/todo-mern/issues"
+  },
+  "homepage": "https://github.com/mirfaiziev/todo-mern#readme",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "config": "^3.3.1",
+    "express": "^4.17.1",
+    "express-validator": "^6.5.0",
+    "jsonwebtoken": "^8.5.1",
+    "materialize-css": "^1.0.0-rc.2",
+    "mongoose": "^5.9.18"
+  },
+  "devDependencies": {
+    "concurrently": "^5.2.0",
+    "nodemon": "^2.0.4"
+  }
+}

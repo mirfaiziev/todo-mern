@@ -11,34 +11,35 @@ const router = Router();
 router.post(
     '/register',
     [
-        check('email', 'incorrectEmail').isEmail(),
-        check('password', 'incorrectPassword min 6 symbols').isLength({min:6})
+        check('email', 'Incorrect email format').isEmail(),
+        check('password', 'Incorrect password min 6 symbols').isLength({min:6})
     ],
     async (request, response) => {
         try {
-            const errors = validationResult(req);
-            if (!empty(errors)) {
-                response.status(400).json({
+            const errors = validationResult(request);
+
+            if (!errors.isEmpty()) {
+                return response.status(400).json({
                     errors: errors.array(),
-                    message: "incorrect data"
+                    message: "Validation failed"
                 })
             }
-            const { email, password } = req.body;
+            const { email, password } = request.body;
 
             const candidate = await User.findOne({ email })
             if (candidate) {
                 return response.status(400).json({ message: 'Such email already exists' })
             }
 
-            const hassedPasswod = await bcryptjs.hash(password, config.get('salt'))
-            const user = new User({ email, password: hassedPasswod })
+            const hashedPassword = await bcryptjs.hash(password, config.get('salt'))
+            const user = new User({ email, password: hashedPassword })
             await user.save()
 
             response.status(201).json({ message: 'User successfully created' })
 
 
         } catch (e) {
-            response.status(500).json({ message: "Something went wrong" });
+            response.status(500).json({ message: "Something went wrong:"+ e.message });
         }
     });
 
@@ -46,19 +47,19 @@ router.post(
 router.post(
     '/login',
     [
-        check('email', 'incorrectEmail').normalizeEmail().isEmail(),
-        check('password', 'incorrectPassword min 6 symbols').isLength({min:6})
+        check('email', 'Incorrect email format').normalizeEmail().isEmail(),
+        check('password', 'Incorrect password min 6 symbols').isLength({min:6})
     ],
     async (request, response) => {
         try {
-            const errors = validationResult(req);
-            if (!empty(errors)) {
-                response.status(400).json({
+            const errors = validationResult(request);
+            if (!errors.isEmpty()) {
+               return response.status(400).json({
                     errors: errors.array(),
-                    message: "incorrect data"
+                    message: "Validation failed"
                 })
             }
-            const { email, password } = req.body;
+            const { email, password } = request.body;
 
             const user = await User.findOne({ email })
             if (!user) {
